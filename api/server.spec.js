@@ -35,6 +35,20 @@ describe('server.js', () => {
                     .send({ user: 'test', pass: 'test' });
                 expect(res.status).toBe(500);
             });
-        })
-    })
-})
+        });
+        describe('login with user', () => {
+            it('should return a 200 with test user', async () => {
+                const res = await request(server)
+                    .post('/api/auth/login')
+                    .send(testUser);
+                expect(res.status).toBe(200);
+            });
+            it('should return a 401 when given a non-valid user', async () => {
+                const res = await request(server)
+                    .post('/api/auth/login')
+                    .send({ username: 'exists not', password: 'exists not' });
+                expect(res.status).toBe(401);
+            });
+        });
+    });
+});
